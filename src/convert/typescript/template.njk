@@ -1,0 +1,59 @@
+{% macro class(cls) %}
+{% if (cls.name | tsharp_cls) %}
+{{ class_body(cls) }}
+{% endif %}
+
+{% for innerClass in cls.classes %}
+{{ class(innerClass) }}
+{%- endfor %}
+{%- endmacro %}
+
+{% macro class_body(cls) %}
+export module {{ cls.name }} {
+    {{ interface(cls, true) | indent(4, false) }}
+    {{ interface(cls, false) | indent(4, false) }}
+    {{ safe_func(cls) | indent(4, false) }}
+}
+{%- endmacro %}
+
+{% macro field(fld, cls, unsafe) -%}
+{% set type = (fld.type | tsharp_type) %}
+{% if unsafe %}
+{{ fld.name }}?: {{ fld.type | tsharp_type }};
+{%- else %}
+{{ fld.name }}: {{ fld.type | tsharp_type | replace(".t", ".safe_t") }};
+{%- endif %}
+{%- endmacro %}
+
+{% macro interface(cls, unsafe) %}
+export interface {% if unsafe %}t{% else %}safe_t{% endif %} {
+    {% for fld in cls.fields %}
+    {{ field(fld, cls, unsafe) }}
+    {% endfor -%}
+}
+{%- endmacro %}
+
+{% macro safe_func(cls) %}
+export function safe(m: t): safe_t {
+    const u = m == null ? {} as t : m
+    const s = {} as safe_t
+    {% for fld in cls.fields %}
+    {{ null_defend(fld, cls) }}
+    {% endfor %}
+    return s
+}
+{%- endmacro %}
+
+{% macro null_defend(fld, cls) -%}
+{% set value = (fld.type | tsharp_from) %}
+{% if value === 'array' %}
+s.{{ fld.name }} = u.{{ fld.name }} == null ? [] : u.{{ fld.name }}.map((e: {{ fld.type | replace("[]", "") }}.t) => { return {{ fld.type | replace("[]", "") }}.safe(e) })
+{%- elif value === 'dict' %}
+s.{{ fld.name }} = u.{{ fld.name }} == null ? {{ fld.type }}.safe(<{{ fld.type }}.t>{}) : {{ fld.type }}.safe(u.{{ fld.name }})
+{%- else %}
+s.{{ fld.name }} = u.{{ fld.name }} || {{ value }}
+{%- endif %}
+{%- endmacro %}
+
+
+{{ class(cls) }}
