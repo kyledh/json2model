@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import * as plural from 'pluralize';
+import { ConvertTypeEnum } from './convert/common';
 
 export const isInteger = (n: number) => n % 1 === 0;
 export const isLong = (n: number) => isInteger(n) && n > 2147483647;
@@ -23,4 +24,16 @@ export function getFileName(path: string): string {
 
 export function getConfiguration<T>(section: string): T | undefined {
     return vscode.workspace.getConfiguration().get<T>(section);
+}
+
+export function getConvertType(): ConvertTypeEnum {
+    let selectedType = getConfiguration<string>("general.defaultConvertType") || "TypeScript";
+    if (selectedType === "C#") {
+        selectedType = "CSharp";
+    }
+    return ConvertTypeEnum[selectedType as keyof typeof ConvertTypeEnum];
+}
+
+export function isValidKey(key: string, obj: object): key is keyof typeof obj {
+    return key in obj;
 }

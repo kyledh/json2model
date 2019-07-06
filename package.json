@@ -19,6 +19,14 @@
             {
                 "command": "j2m.toModel",
                 "title": "Convert JSON to Model"
+            },
+            {
+                "command": "j2m.toTypeScript",
+                "title": "Convert JSON to TypeScript Model"
+            },
+            {
+                "command": "j2m.toCSharp",
+                "title": "Convert JSON to C# Model"
             }
         ],
         "keybindings": [
@@ -30,10 +38,18 @@
         "configuration": {
             "title": "JSON to Model",
             "properties": {
+                "general.defaultConvertType": {
+                    "type": "string",
+                    "enum": ["TypeScript", "C#"],
+                    "default": "TypeScript",
+                    "description": "Default convert type.",
+                    "scope": "resource"
+                },
                 "typescript.duplicateClass": {
                     "type": "boolean",
                     "default": false,
-                    "description": "Generate duplicate class."
+                    "description": "Generate duplicate class.",
+                    "scope": "resource"
                 }
             }
         }

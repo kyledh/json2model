@@ -2,7 +2,8 @@ import * as vscode from 'vscode';
 import { Environment } from 'nunjucks';
 
 export enum ConvertTypeEnum {
-    TypeScript = 'TypeScript'
+    "TypeScript",
+    CSharp = "C#"
 }
 
 export interface RenderInterface {

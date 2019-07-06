@@ -3,6 +3,7 @@ import { TSRender } from './typescript/render';
 import Generator from "../convert/GeneratorModel";
 import { getFileName } from '../utils';
 import { ConvertTypeEnum, RenderInterface, ConvertResult } from './common';
+import { CSRender } from './csharp/render';
 
 export function convert(json: any, type: ConvertTypeEnum) {
     const activeTextEditor = vscode.window.activeTextEditor;
@@ -34,6 +35,9 @@ function json2model(clsName: string, json: any, type: ConvertTypeEnum): ConvertR
     switch (type) {
         case ConvertTypeEnum.TypeScript:
             render = new TSRender();
+            break;
+        case ConvertTypeEnum.CSharp:
+            render = new CSRender();
             break;
         default:
             return { error: '' };
