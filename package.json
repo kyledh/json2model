@@ -50,6 +50,12 @@
                     "default": false,
                     "description": "Generate duplicate class.",
                     "scope": "resource"
+                },
+                "typescript.generateSafeModel": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Generate safe model.",
+                    "scope": "resource"
                 }
             }
         }

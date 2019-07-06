@@ -20,7 +20,17 @@ export class TSRender implements RenderInterface {
             if (this.typeMap.has(type)) {
                 return this.typeMap.get(type);
             }
-            return `${type}.t`.replace('[].t', '.t[]');
+            return type;
+        });
+        this.njk.addFilter('tsharp_safe_type', (type, isSafe = false) => {
+            if (this.typeMap.has(type)) {
+                return this.typeMap.get(type);
+            }
+            if (isSafe) {
+                return `${type}.safe_t`.replace("[].safe_t", ".safe_t[]");
+            } else {
+                return `${type}.t`.replace("[].t", ".t[]");
+            }
         });
         this.njk.addFilter('tsharp_from', (type) => {
             if (this.typeValueMap.has(type)) {
@@ -28,7 +38,7 @@ export class TSRender implements RenderInterface {
             } else if (type.includes('[]')) {
                 return 'array';
             }
-            return 'dict';
+            return 'object';
         });
         this.njk.addFilter('tsharp_cls', (cls: string) => {
             if (getConfiguration<boolean>('typescript.duplicateClass')) {
@@ -46,7 +56,8 @@ export class TSRender implements RenderInterface {
         try {
             const cls = getClass(pascalCase(name), json);
             const template = require('./template.njk').default;
-            let model = this.njk.renderString(template, { cls });
+            const is_safe = getConfiguration<boolean>('typescript.generateSafeModel');
+            let model = this.njk.renderString(template, { cls, is_safe });
             model = model.replace(/ +$/gm, ''); // trim blank lines
             model = model.trim();
             return { data: model };
