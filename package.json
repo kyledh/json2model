@@ -2,7 +2,7 @@
     "name": "json2model",
     "displayName": "JSON to Model",
     "description": "Convert JSON to Model.",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "publisher": "kyledh",
     "engines": {
         "vscode": "^1.35.0"
@@ -40,7 +40,10 @@
             "properties": {
                 "general.defaultConvertType": {
                     "type": "string",
-                    "enum": ["TypeScript", "C#"],
+                    "enum": [
+                        "TypeScript",
+                        "C#"
+                    ],
                     "default": "TypeScript",
                     "description": "Default convert type.",
                     "scope": "resource"
