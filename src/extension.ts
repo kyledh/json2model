@@ -18,11 +18,11 @@ export function activate(context: vscode.ExtensionContext) {
 
     const toModelCommand = vscode.commands.registerCommand("j2m.toModel", () => {
         const type = getConvertType();
-        if (type) {
-            callCommand(type);
-        } else {
+        if (type === undefined) {
             const selected = getConfiguration<string>("general.defaultConvertType");
             vscode.window.showErrorMessage(`Not support convert JSON to ${selected}.`);
+        } else {
+            callCommand(type);
         }
     });
 
