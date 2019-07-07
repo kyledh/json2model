@@ -2,7 +2,7 @@
     "name": "json2model",
     "displayName": "JSON to Model",
     "description": "Convert JSON to Model.",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "publisher": "kyledh",
     "engines": {
         "vscode": "^1.35.0"
