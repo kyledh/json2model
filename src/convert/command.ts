@@ -1,8 +1,7 @@
 import * as vscode from 'vscode';
-import { TSRender } from './typescript/render';
-import Generator from "../convert/GeneratorModel";
 import { getFileName } from '../utils';
-import { ConvertTypeEnum, RenderInterface, ConvertResult } from './common';
+import { ConvertTypeEnum, RenderInterface, ConvertResult } from '../interface';
+import { TSRender } from './typescript/render';
 import { CSRender } from './csharp/render';
 
 export function convert(json: any, type: ConvertTypeEnum) {
@@ -43,14 +42,4 @@ function json2model(clsName: string, json: any, type: ConvertTypeEnum): ConvertR
             return { error: '' };
     }
     return render.render(clsName, json);
-}
-
-function json2ts(clsName: string, json: any) {
-    const gen = new Generator();
-    const model = gen.generateModel({
-        jsonData: json,
-        rootClassName: clsName,
-        duplicate: 'disallow'
-    });
-    return model.model;
 }

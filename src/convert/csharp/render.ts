@@ -1,7 +1,7 @@
 import * as nunjucks from 'nunjucks';
 import { pascalCase } from 'change-case';
-import { getClass } from '../schema';
-import { RenderInterface, ConvertResult } from '../common';
+import { RenderInterface, ConvertResult } from '../../interface';
+import { getClass } from '../lib';
 
 export class CSRender implements RenderInterface {
 

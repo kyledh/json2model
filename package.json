@@ -10,6 +10,12 @@
     "categories": [
         "Other"
     ],
+    "keywords": [
+        "json",
+        "typescript",
+        "c#",
+        "model"
+    ],
     "activationEvents": [
         "onCommand:j2m.toModel"
     ],
@@ -45,20 +51,17 @@
                         "C#"
                     ],
                     "default": "TypeScript",
-                    "description": "Default convert type.",
-                    "scope": "resource"
+                    "description": "Default convert type."
                 },
                 "typescript.duplicateClass": {
                     "type": "boolean",
                     "default": false,
-                    "description": "Generate duplicate class.",
-                    "scope": "resource"
+                    "description": "Generate duplicate class."
                 },
                 "typescript.generateSafeModel": {
                     "type": "boolean",
                     "default": true,
-                    "description": "Generate safe model.",
-                    "scope": "resource"
+                    "description": "Generate safe model."
                 }
             }
         }

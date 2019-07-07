@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
 import * as copyPaste from "copy-paste";
-import { isJSON, getConvertType } from './utils';
-import { convert } from './convert/convert';
-import { ConvertTypeEnum } from './convert/common';
+import { isJSON, getConvertType, getConfiguration } from './utils';
+import { convert } from './convert/command';
+import { ConvertTypeEnum } from './interface';
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -14,10 +14,16 @@ export function activate(context: vscode.ExtensionContext) {
                 vscode.window.showErrorMessage("Clipboard has no valid JSON content.");
             }
         });
-    }
+    };
 
     const toModelCommand = vscode.commands.registerCommand("j2m.toModel", () => {
-        callCommand(getConvertType());
+        const type = getConvertType();
+        if (type) {
+            callCommand(type);
+        } else {
+            const selected = getConfiguration<string>("general.defaultConvertType");
+            vscode.window.showErrorMessage(`Not support convert JSON to ${selected}.`);
+        }
     });
 
     const toTypeScriptCommand = vscode.commands.registerCommand("j2m.toTypeScript", () => {
