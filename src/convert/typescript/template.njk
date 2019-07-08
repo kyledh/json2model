@@ -13,15 +13,15 @@
 export module {{ cls.name }} {
     {{ interface(cls, false) | indent(4, false) }}
     {{ interface(cls, true) | indent(4, false) }}
-    {{ safe_func(cls) | indent(4, false) }}
+    {{ safe_func(cls) | indent(4, false) -}}
 }
-{% else %}
+{%- else %}
 export interface {{ cls.name }} {
     {% for fld in cls.fields %}
     {{ fld.name }}: {{ fld.type | tsharp_type }};
     {% endfor -%}
 }
-{% endif %}
+{%- endif %}
 {%- endmacro %}
 
 {% macro interface(cls, is_safe) %}
