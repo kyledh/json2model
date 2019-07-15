@@ -38,23 +38,23 @@ export interface {% if is_safe %}safe_t{% else %}t{% endif %} {
 
 {% macro safe_func(cls) %}
 export function safe(m: t): safe_t {
-    const u = m == null ? {} as t : m
-    const s = {} as safe_t
+    const u = m == null ? {} as t : m;
+    const s = {} as safe_t;
     {% for fld in cls.fields %}
     {{ null_defend(fld, cls) }}
     {% endfor %}
-    return s
+    return s;
 }
 {%- endmacro %}
 
 {% macro null_defend(fld, cls) -%}
 {% set value = (fld.type | tsharp_from) %}
 {% if value === 'array' %}
-s.{{ fld.name }} = u.{{ fld.name }} == null ? [] : u.{{ fld.name }}.map((e: {{ fld.type | replace("[]", "") }}.t) => { return {{ fld.type | replace("[]", "") }}.safe(e) })
+s.{{ fld.name }} = u.{{ fld.name }} == null ? [] : u.{{ fld.name }}.map((e: {{ fld.type | replace("[]", "") }}.t) => { return {{ fld.type | replace("[]", "") }}.safe(e) });
 {%- elif value === 'object' %}
-s.{{ fld.name }} = u.{{ fld.name }} == null ? {{ fld.type }}.safe(<{{ fld.type }}.t>{}) : {{ fld.type }}.safe(u.{{ fld.name }})
+s.{{ fld.name }} = u.{{ fld.name }} == null ? {{ fld.type }}.safe(<{{ fld.type }}.t>{}) : {{ fld.type }}.safe(u.{{ fld.name }});
 {%- else %}
-s.{{ fld.name }} = u.{{ fld.name }} || {{ value }}
+s.{{ fld.name }} = u.{{ fld.name }} || {{ value }};
 {%- endif %}
 {%- endmacro %}
 

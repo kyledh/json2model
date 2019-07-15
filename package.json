@@ -2,7 +2,7 @@
     "name": "json2model",
     "displayName": "JSON to Model",
     "description": "Convert JSON to Model.",
-    "version": "0.0.9",
+    "version": "0.0.12",
     "publisher": "kyledh",
     "engines": {
         "vscode": "^1.35.0"
@@ -52,6 +52,14 @@
                     ],
                     "default": "TypeScript",
                     "description": "Default convert type."
+                },
+                "general.modelPrefix": {
+                    "type": "string",
+                    "description": "Model prefix."
+                },
+                "general.modelSuffix": {
+                    "type": "string",
+                    "description": "Model suffix."
                 },
                 "typescript.duplicateClass": {
                     "type": "boolean",

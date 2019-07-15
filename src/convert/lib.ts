@@ -1,6 +1,6 @@
 import * as deepmerge from 'deepmerge';
 import { pascalCase } from 'change-case';
-import { isInteger, isLong, singularize } from '../utils';
+import { isInteger, isLong, singularize, getConfiguration } from '../utils';
 
 export function getType(key: string, value: any): string {
     const match = ({}).toString.call(value).match(/\s([a-zA-Z]+)/);
@@ -14,7 +14,9 @@ export function getType(key: string, value: any): string {
         } else if (type === 'array') {
             return `${getType(singularize(key), value[0])}[]`;
         } else if (type === 'object') {
-            return pascalCase(key);
+            const prefix = getConfiguration<string>("general.modelPrefix");
+            const suffix = getConfiguration<string>("general.modelSuffix");
+            return `${prefix}${pascalCase(key)}${suffix}`;
         }
         return type;
     }
