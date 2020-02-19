@@ -11,50 +11,50 @@
 {% macro class_body(cls, is_safe) %}
 {% if is_safe %}
 export module {{ cls.name }} {
-    {{ interface(cls, false) | indent(4, false) }}
-    {{ interface(cls, true) | indent(4, false) }}
-    {{ safe_func(cls) | indent(4, false) -}}
+  {{ interface(cls, false) | indent(2, false) }}
+  {{ interface(cls, true) | indent(2, false) }}
+  {{ safe_func(cls) | indent(2, false) -}}
 }
 {%- else %}
 export interface {{ cls.name }} {
-    {% for fld in cls.fields %}
-    {{ fld.name }}: {{ fld.type | tsharp_type }};
-    {% endfor -%}
+  {% for fld in cls.fields %}
+  {{ fld.name }}: {{ fld.type | tsharp_type }}
+  {% endfor -%}
 }
 {%- endif %}
 {%- endmacro %}
 
 {% macro interface(cls, is_safe) %}
 export interface {% if is_safe %}safe_t{% else %}t{% endif %} {
-    {% for fld in cls.fields %}
-    {{ field(fld, cls, is_safe) }}
-    {% endfor -%}
+  {% for fld in cls.fields %}
+  {{ field(fld, cls, is_safe) }}
+  {% endfor -%}
 }
 {%- endmacro %}
 
 {% macro field(fld, cls, is_safe) -%}
-{{ fld.name }}{% if is_safe == false %}?{% endif %}: {{ fld.type | tsharp_safe_type(is_safe) }};
+{{ fld.name }}{% if is_safe == false %}?{% endif %}: {{ fld.type | tsharp_safe_type(is_safe) }}
 {%- endmacro %}
 
 {% macro safe_func(cls) %}
 export function safe(m: t): safe_t {
-    const u = m == null ? {} as t : m;
-    const s = {} as safe_t;
-    {% for fld in cls.fields %}
-    {{ null_defend(fld, cls) }}
-    {% endfor %}
-    return s;
+  const u = m == null ? {} as t : m
+  const s = {} as safe_t
+  {% for fld in cls.fields %}
+  {{ null_defend(fld, cls) }}
+  {% endfor %}
+  return s
 }
 {%- endmacro %}
 
 {% macro null_defend(fld, cls) -%}
 {% set value = (fld.type | tsharp_from) %}
 {% if value === 'array' %}
-s.{{ fld.name }} = u.{{ fld.name }} == null ? [] : u.{{ fld.name }}.map((e: {{ fld.type | replace("[]", "") }}.t) => { return {{ fld.type | replace("[]", "") }}.safe(e) });
+s.{{ fld.name }} = u.{{ fld.name }} == null ? [] : u.{{ fld.name }}.map((e: {{ fld.type | replace("[]", "") }}.t) => { return {{ fld.type | replace("[]", "") }}.safe(e) })
 {%- elif value === 'object' %}
-s.{{ fld.name }} = u.{{ fld.name }} == null ? {{ fld.type }}.safe(<{{ fld.type }}.t>{}) : {{ fld.type }}.safe(u.{{ fld.name }});
+s.{{ fld.name }} = u.{{ fld.name }} == null ? {{ fld.type }}.safe({} as {{ fld.type }}.t) : {{ fld.type }}.safe(u.{{ fld.name }})
 {%- else %}
-s.{{ fld.name }} = u.{{ fld.name }} || {{ value }};
+s.{{ fld.name }} = u.{{ fld.name }} || {{ value }}
 {%- endif %}
 {%- endmacro %}
 
